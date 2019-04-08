@@ -1,2 +1,2 @@
-# fiesta
-Fiesta - Minimal GUI Library
+# Fiesta
+Fiesta - Low Level Media API

@@ -1,0 +1,9 @@
+-cp lib/thx.core/src
+-cp lib/thx.color/src
+-cp lib/linc_sdl
+-cp lib/linc_openal
+-cp lib/linc_opengl
+-cp lib
+-cp src
+
+-cpp bin/cpp

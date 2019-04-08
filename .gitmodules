@@ -1,0 +1,15 @@
+[submodule "lib/linc_opengl"]
+	path = lib/linc_opengl
+	url = https://github.com/Aidan63/linc_opengl
+[submodule "lib/linc_openal"]
+	path = lib/linc_openal
+	url = https://github.com/snowkit/linc_openal
+[submodule "lib/linc_sdl"]
+	path = lib/linc_sdl
+	url = https://github.com/snowkit/linc_sdl
+[submodule "lib/thx.color"]
+	path = lib/thx.color
+	url = https://github.com/fponticelli/thx.color.git
+[submodule "lib/thx.core"]
+	path = lib/thx.core
+	url = https://github.com/fponticelli/thx.core.git

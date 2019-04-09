@@ -6,10 +6,13 @@
 	url = https://github.com/snowkit/linc_openal
 [submodule "lib/linc_sdl"]
 	path = lib/linc_sdl
-	url = https://github.com/snowkit/linc_sdl
+	url = https://github.com/zenturi/linc_sdl
 [submodule "lib/thx.color"]
 	path = lib/thx.color
 	url = https://github.com/fponticelli/thx.color.git
 [submodule "lib/thx.core"]
 	path = lib/thx.core
 	url = https://github.com/fponticelli/thx.core.git
+[submodule "lib/tink_core"]
+	path = lib/tink_core
+	url = https://github.com/haxetink/tink_core

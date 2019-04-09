@@ -1,3 +1,4 @@
+-cp lib/tink_core/src
 -cp lib/thx.core/src
 -cp lib/thx.color/src
 -cp lib/linc_sdl
@@ -5,5 +6,13 @@
 -cp lib/linc_opengl
 -cp lib
 -cp src
+-cp test
 
 -cpp bin/cpp
+
+-D mac
+-D FIESTA_OPENALSOFT
+-D Debug
+
+-main Test
+

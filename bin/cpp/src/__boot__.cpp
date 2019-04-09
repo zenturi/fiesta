@@ -100,6 +100,9 @@
 #ifndef INCLUDED_Test
 #include <Test.h>
 #endif
+#ifndef INCLUDED_Sys
+#include <Sys.h>
+#endif
 #ifndef INCLUDED_Std
 #include <Std.h>
 #endif
@@ -143,6 +146,7 @@ hx::RegisterResources( hx::GetResources() );
 ::fiesta::graphics::events::RenderEvent_obj::__register();
 ::fiesta::app::events::ApplicationEvent_obj::__register();
 ::Test_obj::__register();
+::Sys_obj::__register();
 ::Std_obj::__register();
 ::fiesta::ui::events::WindowEventType_obj::__boot();
 ::fiesta::ui::events::TextEventType_obj::__boot();

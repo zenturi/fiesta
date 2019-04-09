@@ -30,7 +30,7 @@ class SDLApplication {
 	private static var active:Bool;
 
 	private var gamepadsAxisMap:Map<Int, Map<Int, Int>>;
-	private var inBackground:Bool;
+	private var inBackground:Bool = false;
 	private var framePeriod:Float;
 	private var currentUpdate:Int;
 	private var lastUpdate:Int;
@@ -693,7 +693,7 @@ class SDLApplication {
 
 		#if !ios
 
-		if (active && (firstTime || waitEvent (event) == 0)) {
+		if (active && (firstTime || untyped __cpp__('waitEvent (event)'))) {
 
 			firstTime = false;
 
@@ -738,7 +738,7 @@ class SDLApplication {
 				timerID = SDL.addTimer (nextUpdate - currentUpdate, onTimer, 0);
 
 			}
-            return active;
+            // return active;
 		}
 
 		#end
@@ -754,9 +754,9 @@ class SDLApplication {
     public function waitEvent(event:sdl.Event):Int{
         #if mac
         cpp.vm.Gc.enterGCFreeZone();
-        event = SDL.waitEvent();
+        var result = untyped __cpp__('SDL_WaitEvent (&event)');
         cpp.vm.Gc.exitGCFreeZone();
-        return 0;
+        return result;
         #else
 
         var isBlocking = false;

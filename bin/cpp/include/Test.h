@@ -45,10 +45,12 @@ class HXCPP_CLASS_ATTRIBUTES Test_obj : public hx::Object
 
 		HX_DO_RTTI_ALL;
 		static bool __GetStatic(const ::String &inString, Dynamic &outValue, hx::PropertyAccess inCallProp);
+		static bool __SetStatic(const ::String &inString, Dynamic &ioValue, hx::PropertyAccess inCallProp);
 		static void __register();
 		bool _hx_isInstanceOf(int inClassId);
 		::String __ToString() const { return HX_("Test",72,f4,d2,37); }
 
+		static  ::Dynamic state;
 		static void main();
 		static ::Dynamic main_dyn();
 

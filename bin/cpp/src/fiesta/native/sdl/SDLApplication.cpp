@@ -118,6 +118,7 @@ HXLINE( 668)		this->firstTime = true;
 HXLINE( 667)		this->timerActive = false;
 HXLINE( 666)		this->timerID = 0;
 HXLINE(  49)		this->analogAxisDeadZone = 1000;
+HXLINE(  33)		this->inBackground = false;
 HXLINE(  55)		int initFlags = (((32 | 8192) | 1) | 512);
 HXLINE(  58)		initFlags = (initFlags | 16);
 HXLINE(  61)		if ((SDL_Init(initFlags) != 0)) {
@@ -889,7 +890,7 @@ HXLINE( 692)		event.type = -1;
 HXLINE( 696)		bool _hx_tmp;
 HXDLIN( 696)		if (::fiesta::native::sdl::SDLApplication_obj::active) {
 HXLINE( 696)			if (!(this->firstTime)) {
-HXLINE( 696)				_hx_tmp = (this->waitEvent(event) == 0);
+HXLINE( 696)				_hx_tmp = waitEvent (event);
             			}
             			else {
 HXLINE( 696)				_hx_tmp = true;
@@ -923,7 +924,6 @@ HXLINE( 737)					this->timerActive = true;
 HXLINE( 738)					this->timerID = ::sdl::_SDL::SDL_helper_obj::add_timer((this->nextUpdate - this->currentUpdate),this->onTimer_dyn(),0);
             				}
             			}
-HXLINE( 741)			return ::fiesta::native::sdl::SDLApplication_obj::active;
             		}
 HXLINE( 746)		return ::fiesta::native::sdl::SDLApplication_obj::active;
             	}
@@ -942,9 +942,9 @@ HX_DEFINE_DYNAMIC_FUNC0(SDLApplication_obj,updateFrame,(void))
 int SDLApplication_obj::waitEvent( SDL_Event event){
             	HX_STACKFRAME(&_hx_pos_b069f54676212053_754_waitEvent)
 HXLINE( 756)		__hxcpp_enter_gc_free_zone();
-HXLINE( 757)		event = linc::sdl::waitEvent();
+HXLINE( 757)		int result = SDL_WaitEvent (&event);
 HXLINE( 758)		__hxcpp_exit_gc_free_zone();
-HXLINE( 759)		return 0;
+HXLINE( 759)		return result;
             	}
 
 

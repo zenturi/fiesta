@@ -5,6 +5,7 @@ namespace hx {
 const char *__hxcpp_all_files[] = {
 #ifdef HXCPP_DEBUGGER
 "/usr/local/lib/haxe/std/cpp/_std/Std.hx",
+"/usr/local/lib/haxe/std/cpp/_std/Sys.hx",
 "/usr/local/lib/haxe/std/cpp/_std/haxe/Log.hx",
 "/usr/local/lib/haxe/std/cpp/_std/haxe/Utf8.hx",
 "/usr/local/lib/haxe/std/cpp/_std/haxe/ds/IntMap.hx",
@@ -32,6 +33,7 @@ const char *__hxcpp_all_files[] = {
 const char *__hxcpp_all_files_fullpath[] = {
 #ifdef HXCPP_DEBUGGER
 "/usr/local/lib/haxe/std/cpp/_std/Std.hx",
+"/usr/local/lib/haxe/std/cpp/_std/Sys.hx",
 "/usr/local/lib/haxe/std/cpp/_std/haxe/Log.hx",
 "/usr/local/lib/haxe/std/cpp/_std/haxe/Utf8.hx",
 "/usr/local/lib/haxe/std/cpp/_std/haxe/ds/IntMap.hx",
@@ -59,6 +61,7 @@ const char *__hxcpp_all_files_fullpath[] = {
 const char *__hxcpp_all_classes[] = {
 #ifdef HXCPP_DEBUGGER
 "Std",
+"Sys",
 "Test",
 "fiesta.app.events.ApplicationEvent",
 "fiesta.graphics.events.RenderEvent",

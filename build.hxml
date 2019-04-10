@@ -10,8 +10,11 @@
 
 -cpp bin/cpp
 
+-dce std
+
 -D mac
 -D FIESTA_OPENALSOFT
+-D LINC_OPENGL_GLEW
 -D Debug
 
 -main Test

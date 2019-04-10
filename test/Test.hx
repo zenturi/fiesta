@@ -12,8 +12,6 @@ class Test {
 
     static var state : { window:Window, renderer:Renderer };
     public static function main(){
-
-        // SDL.init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
         
         var app = new SDLApplication();
         ApplicationEvent.callback = function (event:ApplicationEvent) {
@@ -32,11 +30,15 @@ class Test {
 
         RenderEvent.callback = function (event:RenderEvent){
             trace(event.eventType);
-            SDL.setRenderDrawColor(state.renderer, 255, 255, 255, 255);
+            SDL.setRenderDrawColor(state.renderer, 0, 0, 0, 0);
             SDL.renderClear(state.renderer);
             SDL.renderPresent(state.renderer);
         }
         KeyEvent.callback = function(event:KeyEvent){
+            trace(event.eventType);
+        };
+
+        MouseEvent.callback = function(event:MouseEvent){
             trace(event.eventType);
         };
         

@@ -6,6 +6,7 @@ import fiesta.graphics.events.RenderEvent;
 import fiesta.app.events.ApplicationEvent;
 import fiesta.native.sdl.SDLWindow;
 import sdl.SDL;
+import fiesta.ui.Window;
 
 class Test {
 
@@ -41,7 +42,7 @@ class Test {
             trace(event.eventType);
         };
         
-        var window = new SDLWindow(app, 600, 600, SDL_WINDOW_RESIZABLE, "My App");
+        var window = new SDLWindow(app, 600, 600, WINDOW_FLAG_RESIZABLE | WINDOW_FLAG_HARDWARE | WINDOW_FLAG_ALLOW_HIGHDPI , "My App");
         app.exec();
 
         

@@ -40,7 +40,7 @@ class SDLWindow extends Window {
 	private static var currentCursor:Cursor;
 	private static var displayModeSet = false;
 
-	private var context:Dynamic;
+	private var context:GLContext;
 	private var contextHeight:Int;
 	private var contextWidth:Int;
 
@@ -271,6 +271,7 @@ class SDLWindow extends Window {
 	}
 
 	public function alert(message:String, title:String){
+		#if windows
 		untyped __cpp__('
 		int count = 0;
 		int speed = 0;
@@ -287,8 +288,8 @@ class SDLWindow extends Window {
 		fi.uCount = count;
 		fi.dwTimeout = speed;
 		FlashWindowEx (&fi)');
-
-		if (message) {
+		#end
+		if (message != null) {
 
 			SDL.showSimpleMessageBox (SDL_MESSAGEBOX_INFORMATION, title, message, sdlWindow);
 
@@ -300,15 +301,15 @@ class SDLWindow extends Window {
 		if (sdlWindow != null) {
 
 			SDL.destroyWindow (sdlWindow);
-			sdlWindow = 0;
+			sdlWindow = null;
 
 		}
 
-		if (sdlRenderer) {
+		if (sdlRenderer != null) {
 
 			SDL.destroyRenderer (sdlRenderer);
 
-		} else if (context) {
+		} else if (context != null) {
 
 			SDL.GL_DeleteContext (context);
 		}
@@ -321,7 +322,7 @@ class SDLWindow extends Window {
 
 			SDL.GL_SwapWindow (sdlWindow);
 
-		} else if (sdlRenderer) {
+		} else if (sdlRenderer != null) {
 
 			SDL.renderPresent (sdlRenderer);
 
@@ -337,15 +338,15 @@ class SDLWindow extends Window {
 			};
 			size = SDL.getRendererOutputSize (sdlRenderer, size);
 
-			if (w != contextWidth || h != contextHeight) {
+			if (size.w != contextWidth || size.h != contextHeight) {
 				if (sdlTexture != null) {
 
 					SDL.destroyTexture (sdlTexture);
 
-					sdlTexture = SDL.createTexture (sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, w, h);
+					sdlTexture = SDL.createTexture (sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, size.w, size.h);
 
-					contextHeight = h;
-					contextWidth = w;
+					contextHeight = size.h;
+					contextWidth = size.w;
 
 				}
 			}
@@ -380,9 +381,9 @@ class SDLWindow extends Window {
 	}
 	
 
-	public function readPixels(buffer:ImageBuffer, rectangle:Rectangle) {
+	public function readPixels(buffer:ImageBuffer, rect:Rectangle) {
 		if (sdlRenderer != null) {
-			var bounds:SDLRect {
+			var bounds:SDLRect = {
 				x: 0,
 				y: 0,
 				w: 0,
@@ -390,18 +391,18 @@ class SDLWindow extends Window {
 			};
 
 			if (rect != null) {
-				bounds.x = rect.x;
-				bounds.y = rect.y;
+				bounds.x = Std.int(rect.x);
+				bounds.y = Std.int(rect.y);
 				bounds.w = rect.width;
 				bounds.h = rect.height;
 			} else {
-				SDL.getWindowSize(sdlWindow, bounds.w, bounds.h);
+				SDL.getWindowSize(sdlWindow, bounds);
 			}
 
 			buffer.resize(bounds.w, bounds.h, 32);
 
 			SDL.renderReadPixels(sdlRenderer, bounds, SDL_PIXELFORMAT_ABGR8888, buffer.data.buffer.getData(), buffer.stride());
-		} else if (context) {
+		} else if (context != null) {
 			// TODO
 		}
 	}
@@ -415,10 +416,10 @@ class SDLWindow extends Window {
 
 			return "opengl";
 
-		} else if (sdlRenderer) {
-			var info:SDLRendererInfo = {};
+		} else if (sdlRenderer != null) {
+			var info:SDLRendererInfo = null;
 
-			SDL.getRendererInfo (sdlRenderer, info);
+			info = SDL.getRendererInfo (sdlRenderer);
 
 			if ((info.flags & SDL_RENDERER_SOFTWARE) != 0) {
 
@@ -444,8 +445,8 @@ class SDLWindow extends Window {
 		var mode:SDLDisplayMode = null;
 		mode = SDL.getWindowDisplayMode(sdlWindow, mode);
 
-		displayMode->width = mode.w;
-		displayMode->height = mode.h;
+		displayMode.width = mode.w;
+		displayMode.height = mode.h;
 
 
 		switch (mode.format) {
@@ -463,7 +464,7 @@ class SDLWindow extends Window {
 	}
 
 	public function getHeight(){
-		var size:SDLSize {
+		var size:SDLSize =  {
 			w: 0,
 			h: 0
 		}
@@ -484,40 +485,40 @@ class SDLWindow extends Window {
 
 		if (sdlRenderer != null) {
 
-			var outputsize:SDLSize {
+			var outputsize:SDLSize = {
 				w: 0,
 				h: 0
 			}
 
 			outputsize = SDL.getRendererOutputSize (sdlRenderer, outputsize);
 
-			var size:SDLSize {
+			var size:SDLSize = {
 				w: 0,
 				h: 0
 			}
 
 			size = SDL.getWindowSize (sdlWindow, size);
 
-			var scale:Float = outputWidth / width;
+			var scale:Float = outputsize.w / size.w;
 			return scale;
 
-		} else if (context) {
+		} else if (context != null) {
 
-			var outputsize:SDLSize {
+			var outputsize:SDLSize = {
 				w: 0,
 				h: 0
 			}
 
 			outputsize = SDL.GL_GetDrawableSize (sdlWindow, outputsize);
 
-			var size:SDLSize {
+			var size:SDLSize = {
 				w: 0,
 				h: 0
 			}
 
-			size = SDL.getWindowSize (sdlWindow, &width, &height);
+			size = SDL.getWindowSize (sdlWindow, size);
 
-			var scale:Float = outputWidth / width;
+			var scale:Float = outputsize.w / size.w;
 			return scale;
 
 		}
@@ -532,7 +533,7 @@ class SDLWindow extends Window {
 
 
 	public function getWidth(){
-		var size:SDLSize {
+		var size:SDLSize = {
 			w: 0,
 			h: 0
 		}
@@ -543,7 +544,7 @@ class SDLWindow extends Window {
 
 
 	public function getX(){
-		var pos:SDLPoint {
+		var pos:SDLPoint  = {
 			x: 0,
 			y: 0
 		}
@@ -553,7 +554,7 @@ class SDLWindow extends Window {
 	}
 
 	public function getY(){
-		var pos:SDLPoint {
+		var pos:SDLPoint  = {
 			x: 0,
 			y: 0
 		}
@@ -567,7 +568,7 @@ class SDLWindow extends Window {
 	}
 
 	public function resize(width:Int, height:Int) {
-		SDL.setWindowSize(sdlWindow, w, h);
+		SDL.setWindowSize(sdlWindow, width, height);
 	}
 
 	public function setBorderless(borderless:Bool) {
@@ -597,13 +598,13 @@ class SDLWindow extends Window {
 				case MOVE:
 					{
 						if (SDLCursor.moveCursor == null) {
-							SDLCursor.moveCursor = SDL.createSystemCursor(SDL_SYSTEM_MOVE_CROSSHAIR);
+							SDLCursor.moveCursor = SDL.createSystemCursor(SDL_SYSTEM_CURSOR_CROSSHAIR);
 						}
 						SDL.setCursor(SDLCursor.moveCursor);
 					}
 				case POINTER:
 					{
-						if (SDLCursor.pointerCursor -= null) {
+						if (SDLCursor.pointerCursor == null) {
 							SDLCursor.pointerCursor = SDL.createSystemCursor(SDL_SYSTEM_CURSOR_HAND);
 						}
 						SDL.setCursor(SDLCursor.pointerCursor);
@@ -658,7 +659,7 @@ class SDLWindow extends Window {
 					SDL.setCursor(SDLCursor.waitArrowCursor);
 
 				default:
-					if (SDLCursor.arrowCursor) {
+					if (SDLCursor.arrowCursor == null) {
 						SDLCursor.arrowCursor = SDL.createSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
 					}
 
@@ -672,7 +673,7 @@ class SDLWindow extends Window {
 	public function setDisplayMode(displaymode:DisplayMode) {
 		var pixelFormat = 0;
 
-		switch (displayMode.pixelFormat) {
+		switch (displaymode.pixelFormat) {
 			case ARGB32:
 				{
 					pixelFormat = SDL_PIXELFORMAT_ARGB8888;
@@ -687,14 +688,14 @@ class SDLWindow extends Window {
 				}
 		}
 
-		var mode:SDLDisplayMode = {
+		var _mode:SDLDisplayMode = {
 			w: displaymode.width,
-			h: displayMode.height,
-			refresh_rate: displayMode.refreshRate,
+			h: displaymode.height,
+			refresh_rate: displaymode.refreshRate,
 			format: pixelFormat
 		};
 
-		if (SDL.setWindowDisplayMode(sdlWindow, mode) == 0) {
+		if (SDL.setWindowDisplayMode(sdlWindow, _mode) == 0) {
 			displayModeSet = true;
 			if ((SDL.getWindowFlags(sdlWindow) & SDL_WINDOW_FULLSCREEN_DESKTOP) != 0) {
 				SDL.setWindowFullscreen(sdlWindow, SDL_WINDOW_FULLSCREEN);
@@ -720,8 +721,8 @@ class SDLWindow extends Window {
 		var surface = SDL.createRGBSurfaceFrom(imageBuffer.data.buffer.getData(), imageBuffer.width, imageBuffer.height, imageBuffer.bitsPerPixel,
 			imageBuffer.stride(), 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
 		if (surface != null) {
-			SDL.setWindowIcon(sdlWindow);
-			SDL.freeSurface(sdlWindow);
+			SDL.setWindowIcon(sdlWindow, surface);
+			SDL.freeSurface(surface);
 		}
 	}
 

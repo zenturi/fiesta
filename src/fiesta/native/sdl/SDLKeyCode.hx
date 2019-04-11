@@ -1,3 +1,10 @@
+// Copyright (c) 2019 Zenturi Software Co.
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
+
+
 package fiesta.native.sdl;
 
 import sdl.SDL;

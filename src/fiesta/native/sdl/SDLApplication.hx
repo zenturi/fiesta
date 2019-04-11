@@ -1,15 +1,20 @@
+// Copyright (c) 2019 Zenturi Software Co.
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
+
+
 package fiesta.native.sdl;
 
 import cpp.RawPointer;
-import cpp.Pointer;
 import sdl.Keycodes;
-import sdl.Joystick;
 import sdl.SDL;
-import sdl.Keycodes.*;
-import cpp.UInt32;
 import fiesta.ui.events.*;
+import fiesta.ui.Window;
 import fiesta.app.events.ApplicationEvent;
 import fiesta.graphics.events.RenderEvent;
+import fiesta.app.Application;
 
 /**
  * SDLApplication is the native wrapper for handling SDL based windowing, events and application cycle.
@@ -24,9 +29,9 @@ import fiesta.graphics.events.RenderEvent;
     #endif
 ')
 #end
-class SDLApplication {
+class SDLApplication extends Application {
 	public static var callback:SDLApplication->Void;
-	public static var currentApplication:SDLApplication;
+	public static var currentApplication:Application;
 	private static var active:Bool;
 
 	private var gamepadsAxisMap:Map<Int, Map<Int, Int>>;
@@ -52,6 +57,7 @@ class SDLApplication {
 	 * New SDL Application
 	 */
 	public function new() {
+    
 		var initFlags:SDLInitFlags = SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_TIMER | SDL_INIT_JOYSTICK;
 
 		#if FIESTA_OPENALSOFT
@@ -106,7 +112,7 @@ class SDLApplication {
 	 * Start the application life cycle
 	 * @return Int
 	 */
-	public function exec():Int {
+	override public function exec():Int {
 		init();
 
 		#if ios
@@ -259,7 +265,7 @@ class SDLApplication {
 	/**
 	 * Initialize SDL Application
 	 */
-	public function init() {
+	override public function init() {
 		active = true;
 		lastUpdate = SDL.getTicks();
 		nextUpdate = lastUpdate;
@@ -643,7 +649,7 @@ class SDLApplication {
 		return 0;
 	}
 
-    public function registerWindow (window:sdl.Window) {
+    public function registerWindow (window:Window) {
 
 		#if (ios || tvos)
 		SDL.iPhoneSetAnimationCallback (window.sdlWindow, 1, updateFrame, NULL);
@@ -655,7 +661,7 @@ class SDLApplication {
 	 * Set frame rate
 	 * @param frameRate
 	 */
-	public function setFrameRate(frameRate:Float) {
+	override public function setFrameRate(frameRate:Float) {
 		if (frameRate > 0) {
 			framePeriod = 1000.0 / frameRate;
 		} else {
@@ -686,7 +692,7 @@ class SDLApplication {
         return 0;
     }
 
-    public function update ():Bool {
+    override public function update ():Bool {
 
 		var event:sdl.Event = untyped __cpp__('SDL_Event{}');
 		event.type = -1;
@@ -784,7 +790,7 @@ class SDLApplication {
     }
 
 
-    public function createApplication():SDLApplication {
+    public static function createApplication():Application {
         return new SDLApplication();
     }
 }
